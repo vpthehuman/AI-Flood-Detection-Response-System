@@ -1,10 +1,11 @@
-def assess_risk(flood_probability, precipitation_intensity):
-    # Assuming flood_probability and precipitation_intensity are normalized between 0 and 1
-    risk_score = 0.7 * flood_probability + 0.3 * precipitation_intensity
+import numpy as np
+
+def assess_risk(flood_mask):
+    flood_percentage = np.mean(flood_mask)
     
-    if risk_score < 0.4:
-        return "Low", risk_score
-    elif risk_score < 0.7:
-        return "Medium", risk_score
+    if flood_percentage < 0.1:
+        return "Low", flood_percentage
+    elif flood_percentage < 0.3:
+        return "Medium", flood_percentage
     else:
-        return "High", risk_score
+        return "High", flood_percentage
