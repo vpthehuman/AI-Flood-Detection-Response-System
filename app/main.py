@@ -1,14 +1,16 @@
 import streamlit as st
 from PIL import Image
 import torch
+import numpy as np
 from flood_detection.model import FloodDetectionModel
 from flood_detection.data_preprocessing import get_data_transforms
 from risk_assessment.risk_classifier import assess_risk
 from chatbot.predict import load_chatbot, generate_response
 
 # Load models
-flood_model = FloodDetectionModel()
-flood_model.load_state_dict(torch.load('flood_detection_model.pth'))
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+flood_model = FloodDetectionModel().to(device)
+flood_model.load_state_dict(torch.load('flood_detection_model.pth', map_location=device))
 flood_model.eval()
 
 chatbot_model, chatbot_tokenizer = load_chatbot()
@@ -22,23 +24,21 @@ if uploaded_file is not None:
     
     # Preprocess image
     transform = get_data_transforms()['val']
-    input_tensor = transform(image).unsqueeze(0)
+    input_tensor = transform(image).unsqueeze(0).to(device)
     
     # Perform flood detection
     with torch.no_grad():
         output = flood_model(input_tensor)
-        probabilities = torch.nn.functional.softmax(output, dim=1)
-        flood_probability = probabilities[0][1].item()
-    
-    # For demonstration, we'll use a random value for precipitation intensity
-    precipitation_intensity = 0.5  # In a real scenario, this would come from actual data
+        flood_mask = (output > 0.5).squeeze().cpu().numpy()
     
     # Assess risk
-    risk_level, risk_score = assess_risk(flood_probability, precipitation_intensity)
+    risk_level, flood_percentage = assess_risk(flood_mask)
     
-    st.write(f"Flood Probability: {flood_probability:.2f}")
+    st.write(f"Flood Percentage: {flood_percentage:.2%}")
     st.write(f"Risk Level: {risk_level}")
-    st.write(f"Risk Score: {risk_score:.2f}")
+    
+    # Display flood mask
+    st.image(flood_mask, caption="Flood Mask", use_column_width=True, clamp=True)
 
 st.subheader("Flood Response Chatbot")
 user_input = st.text_input("Ask a question about flood response:")
