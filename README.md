@@ -19,14 +19,15 @@ cd AI-Flood-Detection-Response-Sys
 
 2. Create a virtual environment: 
 python -m venv venv
-source venv/bin/activate # On Windows, use venv\Scripts\activate
+source venv/bin/activate
+# On Windows, use venv\Scripts\activate
 
 
-3. Install dependencies:
+4. Install dependencies:
 pip install -r requirements.txt
 
 
-4. Set up the FloodNet dataset:
+5. Set up the FloodNet dataset:
 - Place your ColorMasks-FloodNetv1 folder in the `data` directory
 - Ensure the subfolders (ColorMask-TestSet, ColorMask-TrainSet, ColorMask-ValSet) are present
 
@@ -42,10 +43,11 @@ python chatbot/train.py
 streamlit run app/main.py
 
 
+
+
 ## Usage
 
-1. Open the web application in your browser (typically at `http://localhost:8501`)
-2. Upload an image for flood detection
-3. View the flood detection results and risk assessment
-4. Use the chatbot to ask flood-related questions
+1. Upload an image for flood detection
+2. View the flood detection results and risk assessment
+3. Use the chatbot to ask flood-related questions
 
