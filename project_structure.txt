@@ -1,0 +1,19 @@
+AI-Flood-Detection-Response-System/
+├── flood_detection/
+│   ├── model.py
+│   ├── train_model.py
+│   └── data_preprocessing.py
+├── risk_assessment/
+│   └── risk_classifier.py
+├── chatbot/
+│   ├── train.py
+│   └── predict.py
+├── app/
+│   └── main.py
+├── data/
+│   └── ColorMasks-FloodNetv1/
+│       ├── ColorMask-TestSet/
+│       ├── ColorMask-TrainSet/
+│       └── ColorMask-ValSet/
+├── requirements.txt
+└── README.md
