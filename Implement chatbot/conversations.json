@@ -1,0 +1,14 @@
+[
+    {
+        "input": "What should I do during a flood?",
+        "response": "Stay indoors, avoid flooded areas, and listen to emergency services."
+    },
+    {
+        "input": "How can I prepare for a flood?",
+        "response": "Keep emergency supplies, know your evacuation routes, and stay informed."
+    },
+    {
+        "input": "What are the common signs of a flood?",
+        "response": "Rising water levels, continuous rain, and overflowing rivers."
+    }
+]
