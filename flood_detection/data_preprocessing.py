@@ -1,7 +1,28 @@
+import os
 import numpy as np
+import torch
+import torchvision.transforms as T
 from PIL import Image
 
-class FloodNetDataset(Dataset):
+transforms = {
+    'train' : T.Compose([
+        T.ToPILImage(),
+        T.RandomHorizontalFlip(),
+        T.RandomVerticalFlip(),
+        T.ToTensor(),
+        T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+    ]),
+    'val' : T.Compose([
+        T.ToPILImage(),
+        T.ToTensor(),
+        T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+}
+
+def get_data_transforms():
+    return transforms
+
+class FloodNetDataset(torch.utils.data.Dataset):
     def __init__(self, root_dir, transform=None):
         self.root_dir = root_dir
         self.transform = transform
@@ -22,20 +43,20 @@ class FloodNetDataset(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir, self.images[idx])
         image = Image.open(img_name)
-        
+
         # Convert image to numpy array
         image_np = np.array(image)
-        
+
         # Create a mask for flooded areas (building-flooded and road-flooded)
         flood_mask = np.logical_or(
             np.all(image_np == [255, 0, 0], axis=-1),
             np.all(image_np == [160, 150, 20], axis=-1)
         )
-        
+
         # Convert mask to tensor
         flood_mask = torch.tensor(flood_mask, dtype=torch.float32)
-        
+
         if self.transform:
             image = self.transform(image)
-        
+
         return image, flood_mask

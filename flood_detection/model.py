@@ -1,9 +1,12 @@
+import torch.nn as nn
+import torchvision
+
 class FloodDetectionModel(nn.Module):
     def __init__(self):
         super(FloodDetectionModel, self).__init__()
-        self.resnet = models.resnet50(pretrained=True)
+        self.resnet = torchvision.models.resnet50(pretrained=True)
         self.resnet.fc = nn.Identity()
-        
+
         self.upsample = nn.Sequential(
             nn.ConvTranspose2d(2048, 1024, kernel_size=2, stride=2),
             nn.ReLU(inplace=True),
