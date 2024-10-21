@@ -3,10 +3,20 @@ from PIL import Image
 import torch
 import torch.nn.functional as F
 import numpy as np
+
+# # Uncomment here if got error of importing flood_detection module
+# import sys
+# import os
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from flood_detection.model import FloodDetectionModel
-from flood_detection.dataset import get_data_transforms
-# from risk_assessment.risk_classifier import assess_risk
+from flood_detection.data_preprocessing import get_data_transforms
+from risk_assessment.risk_classifier import assess_risk
+
+# Import chatbot modules
 from chatbot.predict import load_chatbot, generate_response
+# Load the chatbot model and tokenizer
+chatbot_model, chatbot_tokenizer = load_chatbot()
 
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
