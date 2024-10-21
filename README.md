@@ -13,34 +13,70 @@ This project combines advanced deep learning techniques for flood detection with
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/your-username/AI-Flood-Detection-Response-System.git
-cd AI-Flood-Detection-Response-Sys 
+    ```bash
+    git clone https://github.com/your-username/AI-Flood-Detection-Response-System.git
+    cd AI-Flood-Detection-Response-Sys
+    ```
 
 
-2. Create a virtual environment: 
-python -m venv venv
-source venv/bin/activate # On Windows, use venv\Scripts\activate
+2. Create a virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate # On Windows, use venv\Scripts\activate
+    ```
 
 
 4. Install dependencies:
-pip install -r requirements.txt
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 
 5. Set up the FloodNet dataset:
-- Place your ColorMasks-FloodNetv1 folder in the `data` directory
-- Ensure the subfolders (ColorMask-TestSet, ColorMask-TrainSet, ColorMask-ValSet) are present
+    - ~~Place your ColorMasks-FloodNetv1 folder in the `data` directory~~
+    - ~~Ensure the subfolders (ColorMask-TestSet, ColorMask-TrainSet, ColorMask-ValSet) are present~~
+
+    Currently, only image classification is available. Download ```data.zip``` from our WhatsApp and unzip it. The result will look like this:
+
+    ```bash
+    data
+    └── processed
+        ├── test
+        │   ├── ann
+        │   └── img
+        ├── train
+        │   ├── labeled
+        |   │   └── flooded
+        |   │       ├── ann
+        |   │       └── img
+        |   └── non-flooded
+        |   |       ├── ann
+        |   |       └── img
+        |   └── unlabeled
+        |       ├── ann
+        |       └── img
+        └── validation
+            ├── ann
+            └── img
+    ```
+
 
 5. Train the flood detection model:
-python flood_detection/train_model.py
+    ```bash
+    python flood_detection/train_model.py
+    ```
 
 
 6. Fine-tune the chatbot:
-python chatbot/train.py
+    ```bash
+    python chatbot/train.py
+    ```
 
 
 7. Run the application:
-streamlit run app/main.py
-
+    ```bash
+    streamlit run app/main.py
+    ```
 
 
 
