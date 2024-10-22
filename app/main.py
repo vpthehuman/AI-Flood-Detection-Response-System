@@ -4,14 +4,14 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 
-# # Uncomment here if got error of importing flood_detection module
-# import sys
-# import os
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Uncomment here if got error of importing flood_detection module
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from flood_detection.model import FloodDetectionModel
-from flood_detection.data_preprocessing import get_data_transforms
-from risk_assessment.risk_classifier import assess_risk
+from flood_detection.dataset import get_data_transforms  # Correct import for get_data_transforms
+from flood_detection.risk_classifier import assess_risk
 
 # Import chatbot modules
 from chatbot.predict import load_chatbot, generate_response
@@ -21,10 +21,8 @@ chatbot_model, chatbot_tokenizer = load_chatbot()
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 flood_model = FloodDetectionModel().to(device)
-flood_model.load_state_dict(torch.load("flood_detection/checkpoints/20241020_213048_last.pt", map_location=device)["model_state_dict"])
+flood_model.load_state_dict(torch.load("./flood_detection/checkpoints/20241022_15132_last.pt", map_location=device)["model_state_dict"])
 flood_model.eval()
-
-chatbot_model, chatbot_tokenizer = None, None  # load_chatbot()
 
 st.title("AI-Powered Flood Detection and Response System")
 
@@ -40,17 +38,13 @@ if uploaded_file is not None:
     # Perform flood detection
     with torch.no_grad():
         output = flood_model(input_tensor)
-        flood_prob = F.softmax(output).squeeze()
-        # flood_mask = (output > 0.5).squeeze().cpu().numpy()
+        flood_prob = F.softmax(output, dim=1).squeeze()
 
     # Assess risk
-    risk_level, flood_percentage = "???", flood_prob[1]  # assess_risk(flood_mask)
+    risk_level, flood_percentage = assess_risk(flood_prob[1]), flood_prob[1]
 
     st.write(f"Flood Percentage: {flood_percentage:.2%}")
     st.write(f"Risk Level: {risk_level}")
-
-    # Display flood mask
-    # st.image(flood_mask, caption="Flood Mask", use_column_width=True, clamp=True)
 
 st.subheader("Flood Response Chatbot")
 user_input = st.text_input("Ask a question about flood response:")
