@@ -13,16 +13,20 @@ from flood_detection.model import FloodDetectionModel
 from flood_detection.dataset import get_data_transforms  # Correct import for get_data_transforms
 from flood_detection.risk_classifier import assess_risk
 
+# Select checkpoint location
+checkpoint_location = "./flood_detection/checkpoints/20241022_15132_last.pt"
+
+# Load models
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+flood_model = FloodDetectionModel().to(device)
+flood_model.load_state_dict(torch.load(checkpoint_location, map_location=device)["model_state_dict"])
+flood_model.eval()
+
 # Import chatbot modules
 from chatbot.predict import load_chatbot, generate_response
 # Load the chatbot model and tokenizer
 chatbot_model, chatbot_tokenizer = load_chatbot()
 
-# Load models
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-flood_model = FloodDetectionModel().to(device)
-flood_model.load_state_dict(torch.load("./flood_detection/checkpoints/20241022_15132_last.pt", map_location=device)["model_state_dict"])
-flood_model.eval()
 
 st.title("AI-Powered Flood Detection and Response System")
 
