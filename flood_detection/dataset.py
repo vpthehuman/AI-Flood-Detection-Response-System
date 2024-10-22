@@ -5,6 +5,7 @@ import torch
 import torchvision.transforms as T
 from PIL import Image
 from skimage import io
+from typing import List, Optional  # Add this at the top
 
 
 transforms = {
@@ -30,7 +31,7 @@ class FloodDataset(torch.utils.data.Dataset):
   """
   This is to use with array of files and array of labels as an input
   """
-  def __init__(self, X: list[str], y: Optional[list[int]], transform=None):
+  def __init__(self, X: List[str], y: Optional[List[int]], transform=None):  # Use List from typing
     self.X = X
     self.y = y
     self.transform = transform

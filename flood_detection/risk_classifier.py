@@ -1,11 +1,9 @@
 import numpy as np
 
-def assess_risk(flood_mask):
-    flood_percentage = np.mean(flood_mask)
-    
+def assess_risk(flood_percentage):
     if flood_percentage < 0.1:
-        return "Low", flood_percentage
+        return "Low"
     elif flood_percentage < 0.3:
-        return "Medium", flood_percentage
+        return "Medium"
     else:
-        return "High", flood_percentage
+        return "High"
